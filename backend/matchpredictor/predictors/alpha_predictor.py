@@ -1,17 +1,17 @@
 from matchpredictor.predictors.predictor import Prediction, Predictor
-from matchpredictor.matchresults.result import Fixture, Outcome, Result, Team
+from matchpredictor.matchresults.result import Fixture, Outcome, Team
 
 
 #A function that sorts two teams by name alphabetically
-def sort_teams(team1: Team, team2: Team) -> Tuple[Team, Team]:
+def sort_teams(team1: Team, team2: Team) -> Outcome:
     if team1.name < team2.name:
-        return (team1, team2)
+        return Outcome.AWAY
     else:
-        return (team2, team1)
+        return Outcome.HOME
 
 # AlphaPredictor is a predictor that arranges teams by name alphabetically, and predictas the first team to win.
 class AlphaPredictor(Predictor):
     def predict(self, fixture: Fixture) -> Prediction:
-        team1, team2 = sort_teams(fixture.home_team, fixture.away_team)
-        return Prediction(team1, 1.0, team2, 0.0)
+        outcome = sort_teams(fixture.home_team, fixture.away_team)
+        return Prediction(outcome, 1.0)
         

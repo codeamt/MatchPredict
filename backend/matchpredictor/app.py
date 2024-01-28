@@ -12,6 +12,7 @@ from matchpredictor.model.model_provider import ModelProvider, Model
 from matchpredictor.model.models_api import models_api
 from matchpredictor.predictors.home_predictor import HomePredictor
 from matchpredictor.predictors.alpha_predictor import AlphaPredictor
+from matchpredictor.predictors.custom_predictor import CustomPredictor
 from matchpredictor.predictors.linear_regression_predictor import train_regression_predictor
 from matchpredictor.predictors.past_results_predictor import train_results_predictor
 from matchpredictor.predictors.simulation_predictor import train_offense_and_defense_predictor, train_offense_predictor
@@ -21,7 +22,7 @@ from matchpredictor.upcominggames.football_data_api_client import FootballDataAp
 from matchpredictor.upcominggames.upcoming_games_api import upcoming_games_api
 
 
-def build_model_provider(training_data: List[Result]) -> ModelProvider:
+def build_model_provider(training_data: List[Result]) -> ModelProvider: 
     return ModelProvider([
         Model("Home", HomePredictor()),
         Model("Points", train_results_predictor(training_data)),
@@ -29,7 +30,9 @@ def build_model_provider(training_data: List[Result]) -> ModelProvider:
         Model("Offense simulator", train_offense_predictor(training_data, 10_000)),
         Model("Full simulator (fast)", train_offense_and_defense_predictor(training_data, 1_000)),
         Model("Full simulator", train_offense_and_defense_predictor(training_data, 10_000)),
+        #Added my custom predictors to the list of models
         Model("Alpha", AlphaPredictor()),
+        Model("Custom", CustomPredictor()),
         # The linear regression model uses scikit learn, so can cause issues on some machines
         # Model("Linear regression", train_regression_predictor(training_data))
     ])
